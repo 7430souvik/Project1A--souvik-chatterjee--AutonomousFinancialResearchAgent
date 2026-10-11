@@ -1,0 +1,96 @@
+
+flowchart TD
+    U["User Financial Research Query"]
+
+    subgraph ORCH["Agent Orchestration"]
+        QA["Query Analyzer"]
+        MM["Memory Manager"]
+        P["Research Planner"]
+        EX["Bounded Agent Executor"]
+        OP["Observation Processor"]
+    end
+
+    subgraph TOOLS["Tool Layer"]
+        TR["Tool Registry"]
+        SEC["SEC EDGAR Tool"]
+        FIN["Financial API Tool"]
+        WEB["Web Search Tool"]
+        NEWS["News & Sentiment Tool"]
+        EARN["Earnings Transcript Tool"]
+        PROF["Company Profile Tool"]
+        PEER["Peer Comparison Tool"]
+        CALC["Financial Calculator"]
+        FACT["Fact Checker"]
+        REP["Report Generator"]
+    end
+
+    subgraph MEMORY["Three-Layer Memory"]
+        STM["Short-Term Context"]
+        LTM["Long-Term Vector Store"]
+        EM["Episodic Memory"]
+    end
+
+    subgraph SYN["Synthesis & Verification"]
+        SYNTH["Synthesis Engine"]
+        CON["Conflict Resolver"]
+        VER["Citation & Numerical Verifier"]
+    end
+
+    subgraph SOURCES["External Data Sources"]
+        EDGAR["SEC Filings"]
+        FAPI["Financial Data Provider"]
+        WDATA["Web Pages & News"]
+        TDATA["Earnings Transcripts"]
+    end
+
+    EVAL["Evaluation & Execution Logs"]
+    OUT["Final Research Report with Citations"]
+
+    U --> QA
+    QA --> MM
+    MM <--> STM
+    MM <--> LTM
+    MM <--> EM
+    MM --> P
+    P --> EX
+    EX --> TR
+
+    TR --> SEC
+    TR --> FIN
+    TR --> WEB
+    TR --> NEWS
+    TR --> EARN
+    TR --> PROF
+    TR --> PEER
+    TR --> CALC
+    TR --> FACT
+    TR --> REP
+
+    SEC --> EDGAR
+    FIN --> FAPI
+    WEB --> WDATA
+    NEWS --> WDATA
+    EARN --> TDATA
+    PROF --> FAPI
+    PEER --> FAPI
+
+    SEC --> OP
+    FIN --> OP
+    WEB --> OP
+    NEWS --> OP
+    EARN --> OP
+    PROF --> OP
+    PEER --> OP
+    CALC --> OP
+
+    OP --> EX
+    EX --> SYNTH
+    SYNTH --> CON
+    CON --> VER
+    VER --> REP
+    REP --> OUT
+
+    EX -. "Trace events" .-> EVAL
+    SYNTH -. "Quality metrics" .-> EVAL
+    VER -. "Verification results" .-> EVAL
+    OUT --> MM
